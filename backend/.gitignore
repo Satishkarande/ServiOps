@@ -1,0 +1,6 @@
+# Local ticket attachment storage
+uploads/
+
+# Python cache
+__pycache__/
+*.py[cod]
