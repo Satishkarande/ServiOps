@@ -6,7 +6,6 @@ import {
 import { API_URL } from "../config";
 import {
   Link,
-  useNavigate,
   useParams,
 } from "react-router-dom";
 
@@ -21,9 +20,6 @@ function TicketDetails() {
 
   const { ticketId } =
     useParams();
-
-  const navigate =
-    useNavigate();
 
   const {
     accessToken,
@@ -2244,75 +2240,6 @@ function TicketDetails() {
 
     };
 
-
-  const getHistoryClass =
-    action => {
-
-      const value =
-        String(
-          action || ""
-        ).toLowerCase();
-
-
-      if (
-        value.includes(
-          "denied"
-        )
-      ) {
-        return "history-action-denied";
-      }
-
-      if (
-        value.includes(
-          "closed"
-        )
-      ) {
-        return "history-action-closed";
-      }
-
-      if (
-        value.includes(
-          "request"
-        )
-      ) {
-        return "history-action-requested";
-      }
-
-      if (
-        value.includes(
-          "assign"
-        )
-      ) {
-        return "history-action-assigned";
-      }
-
-      if (
-        value.includes(
-          "resolution"
-        )
-      ) {
-        return "history-action-resolution";
-      }
-
-      if (
-        value.includes(
-          "priority"
-        )
-      ) {
-        return "history-action-priority";
-      }
-
-      if (
-        value.includes(
-          "reopen"
-        )
-      ) {
-        return "history-action-reopened";
-      }
-
-      return "history-action-default";
-
-    };
 
 
   // ============================================================

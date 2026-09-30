@@ -4,6 +4,7 @@ import { useAuth } from "../auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 const movementClass=type=>({RECEIPT:"receipt",ISSUE:"issue",ADJUSTMENT_IN:"adjust-in",ADJUSTMENT_OUT:"adjust-out"}[type]||"");
 function StockMovements(){
+    const navigate = useNavigate();
  const {accessToken,hasPermission,isAuthenticated}=useAuth(); const [movements,setMovements]=useState([]);const [parts,setParts]=useState([]);const [loading,setLoading]=useState(true);const [error,setError]=useState("");
  const partsById=useMemo(()=>new Map(parts.map(part=>[part.id,part])),[parts]);
  useEffect(()=>{if(!isAuthenticated||!accessToken)return;const load=async()=>{try{setLoading(true);setError("");const[movementResponse,partsResponse]=await Promise.all([fetch(`${API_URL}/stock-movements/`,{headers:{Authorization:`Bearer ${accessToken}`}}),fetch(`${API_URL}/spare-parts/`,{headers:{Authorization:`Bearer ${accessToken}`}})]);if(!movementResponse.ok)throw new Error(`Failed to load stock movements: ${movementResponse.status} ${await movementResponse.text()}`);if(!partsResponse.ok)throw new Error(`Failed to load spare parts: ${partsResponse.status} ${await partsResponse.text()}`);const movementData=await movementResponse.json();const partsData=await partsResponse.json();setMovements(Array.isArray(movementData)?movementData:[]);setParts(Array.isArray(partsData)?partsData:[]);}catch(err){console.error(err);setError(err.message)}finally{setLoading(false)}};load()},[accessToken,isAuthenticated]);

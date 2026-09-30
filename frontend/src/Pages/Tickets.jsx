@@ -864,18 +864,7 @@ function Tickets() {
   // OPEN CREATE FORM
   // ============================================================
 
-  const handleOpenCreate =
-    () => {
-
-      resetForm();
-
-      setError("");
-
-      setShowCreateForm(
-        true
-      );
-
-    };
+     
 
 
   // ============================================================

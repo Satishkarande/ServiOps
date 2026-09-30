@@ -346,7 +346,8 @@ function NotificationBell() {
 
 
         case "CLOSE_REQUEST":
-
+            
+        // fall through to the next case for backward compatibility
         case "CLOSE_REQUESTED":
 
           return {
@@ -361,7 +362,11 @@ function NotificationBell() {
 
         case "CLOSE_DENIED":
 
+        // fall through to the next case for backward compatibility
+
         case "CLOSURE_DENIED":
+
+        // fall through to the next case for backward compatibility
 
         case "TICKET_CLOSE_DENIED":
 
@@ -401,6 +406,8 @@ function NotificationBell() {
 
         case "TICKET_REOPENED":
 
+        // fall through to the next case for backward compatibility
+
         case "TICKET_REOPEN":
 
           return {
@@ -414,7 +421,7 @@ function NotificationBell() {
 
 
         case "TICKET_CANCELLED":
-
+         // fall through to the next case for backward compatibility
         case "TICKET_CANCELED":
 
           return {

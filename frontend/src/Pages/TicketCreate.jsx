@@ -34,7 +34,7 @@ function TicketCreate() {
   const [customers, setCustomers] =
     useState([]);
 
-  const [plants, setPlants] =
+  const [, setPlants] =
     useState([]);
 
   const [machines, setMachines] =
