@@ -14,3 +14,12 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+# Secrets / deployment files
+*.pem
+
+# Database backups
+*.dump
+*.sql
+
+# Uploaded files / archives
+*.tar.gz
