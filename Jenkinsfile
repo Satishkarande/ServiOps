@@ -48,4 +48,18 @@ pipeline {
             }
         }
     }
+
+    post {
+    success {
+        echo 'ServiOps CI completed successfully!'
+    }
+
+    failure {
+        echo 'ServiOps CI failed!'
+    }
+
+    always {
+        echo 'ServiOps pipeline execution finished.'
+    }
+}
 }
