@@ -1,6 +1,7 @@
 pipeline {
     agent any
 
+
     stages {
 
         stage('Environment Info') {
