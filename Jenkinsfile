@@ -1,6 +1,17 @@
 pipeline {
     agent any
 
+stage('Environment Info') {
+    steps {
+        sh '''
+            echo "Job Name: $JOB_NAME"
+            echo "Build Number: $BUILD_NUMBER"
+            echo "Workspace: $WORKSPACE"
+            echo "Git Commit: $GIT_COMMIT"
+            echo "Node: $NODE_NAME"
+        '''
+    }
+}
     stages {
 
         stage('Backend Validation') {
