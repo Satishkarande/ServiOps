@@ -18,6 +18,7 @@ pipeline {
         stage('Backend Validation') {
             steps {
                 sh 'python3 -m compileall backend/app'
+                sh 'exit 1'
             }
         }
 
