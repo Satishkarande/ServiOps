@@ -73,6 +73,40 @@ pipeline {
         '''
     }
 }
+
+stage('Push Docker Images to ECR') {
+    steps {
+        sh '''
+            echo "===== Logging in to Amazon ECR ====="
+
+            aws ecr get-login-password --region ap-south-1 | \
+            docker login --username AWS --password-stdin \
+            373220260877.dkr.ecr.ap-south-1.amazonaws.com
+
+            echo "===== Tagging Backend Image ====="
+
+            docker tag serviops-backend:${BUILD_NUMBER} \
+            373220260877.dkr.ecr.ap-south-1.amazonaws.com/serviops-backend:${BUILD_NUMBER}
+
+            echo "===== Tagging Frontend Image ====="
+
+            docker tag serviops-frontend:${BUILD_NUMBER} \
+            373220260877.dkr.ecr.ap-south-1.amazonaws.com/serviops-frontend:${BUILD_NUMBER}
+
+            echo "===== Pushing Backend Image ====="
+
+            docker push \
+            373220260877.dkr.ecr.ap-south-1.amazonaws.com/serviops-backend:${BUILD_NUMBER}
+
+            echo "===== Pushing Frontend Image ====="
+
+            docker push \
+            373220260877.dkr.ecr.ap-south-1.amazonaws.com/serviops-frontend:${BUILD_NUMBER}
+
+            echo "===== ECR Push Completed ====="
+        '''
+    }
+}
     }
 
     post {
