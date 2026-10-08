@@ -16,6 +16,16 @@ pipeline {
             }
         }
 
+        stage('Docker Check') {
+    steps {
+        sh '''
+            whoami
+            docker --version
+            docker ps
+        '''
+    }
+}
+
         stage('Backend Validation') {
             steps {
                 sh 'python3 -m compileall backend/app'
