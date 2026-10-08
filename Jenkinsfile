@@ -58,6 +58,21 @@ pipeline {
                 '''
             }
         }
+  stage('Build Docker Images') {
+    steps {
+        sh '''
+            echo "===== Building Backend Docker Image ====="
+            docker build -t serviops-backend:${BUILD_NUMBER} ./backend
+
+            echo "===== Building Frontend Docker Image ====="
+            docker build -t serviops-frontend:${BUILD_NUMBER} ./frontend
+
+            echo "===== Docker Images Built ====="
+            docker images serviops-backend
+            docker images serviops-frontend
+        '''
+    }
+}
     }
 
     post {
