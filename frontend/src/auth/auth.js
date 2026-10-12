@@ -1,6 +1,5 @@
 import { cognitoConfig } from "./cognito";
 
-
 const generateRandomString = (length = 64) => {
   const chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
@@ -14,7 +13,6 @@ const generateRandomString = (length = 64) => {
     .join("");
 };
 
-
 const base64UrlEncode = (arrayBuffer) => {
   return btoa(
     String.fromCharCode(
@@ -26,7 +24,6 @@ const base64UrlEncode = (arrayBuffer) => {
     .replace(/=+$/, "");
 };
 
-
 const sha256 = async (plainText) => {
   const encoder = new TextEncoder();
 
@@ -36,15 +33,14 @@ const sha256 = async (plainText) => {
   );
 };
 
-
 export async function login() {
   const codeVerifier = generateRandomString();
 
-  const challengeBuffer =
-    await sha256(codeVerifier);
+  const challengeBuffer = await sha256(codeVerifier);
 
-  const codeChallenge =
-    base64UrlEncode(challengeBuffer);
+  const codeChallenge = base64UrlEncode(
+    challengeBuffer
+  );
 
   sessionStorage.setItem(
     "cognito_code_verifier",
@@ -65,12 +61,10 @@ export async function login() {
     `${cognitoConfig.domain}/oauth2/authorize?${params}`;
 }
 
-
 export async function exchangeCodeForTokens(code) {
-  const codeVerifier =
-    sessionStorage.getItem(
-      "cognito_code_verifier"
-    );
+  const codeVerifier = sessionStorage.getItem(
+    "cognito_code_verifier"
+  );
 
   if (!codeVerifier) {
     throw new Error(
@@ -132,13 +126,11 @@ export async function exchangeCodeForTokens(code) {
   return tokens;
 }
 
-
 export function getAccessToken() {
   return sessionStorage.getItem(
     "access_token"
   );
 }
-
 
 export function logout() {
   // Clear local authentication data first
@@ -147,14 +139,12 @@ export function logout() {
   sessionStorage.removeItem("refresh_token");
   sessionStorage.removeItem("cognito_code_verifier");
 
-  // Tell Cognito to end its hosted login session
+  // Tell Cognito to end the hosted login session
   const params = new URLSearchParams({
     client_id: cognitoConfig.clientId,
-    logout_uri: "http://localhost:5173/",
+    logout_uri: cognitoConfig.logoutUri,
   });
 
   window.location.href =
     `${cognitoConfig.domain}/logout?${params.toString()}`;
 }
-
-

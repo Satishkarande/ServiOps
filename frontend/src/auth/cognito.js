@@ -1,3 +1,5 @@
+const isProduction = import.meta.env.PROD;
+
 export const cognitoConfig = {
   region: "ap-south-1",
 
@@ -8,8 +10,11 @@ export const cognitoConfig = {
   domain:
     "https://ap-south-15nv2x8ml6.auth.ap-south-1.amazoncognito.com",
 
-  redirectUri:
-    "http://localhost:5173/auth/callback",
+  redirectUri: isProduction
+    ? "https://serviops.xyz/auth/callback"
+    : "http://localhost:5173/auth/callback",
+
+  logoutUri: isProduction
+    ? "https://serviops.xyz/"
+    : "http://localhost:5173/",
 };
-
-
