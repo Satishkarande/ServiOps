@@ -282,4 +282,4 @@ EOF
         }
     }
 }
-#build chek 
+#build check
