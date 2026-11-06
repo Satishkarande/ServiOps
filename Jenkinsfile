@@ -92,10 +92,8 @@ pipeline {
                 sh '''
                     set -eu
 
-                    aws ecr get-login-password --region "$AWS_REGION" |
-                        docker login \
-                            --username AWS \
-                            --password-stdin "$ECR_REGISTRY"
+                    # ECR authentication is handled by docker-credential-ecr-login.
+                    # Do not run docker login: the helper's store operation is not implemented.
 
                     docker tag \
                         "serviops-backend:${BUILD_NUMBER}" \
@@ -189,12 +187,9 @@ fi
 echo "Previous successful version: $PREVIOUS_TAG"
 echo "New version: $NEW_TAG"
 
-# Authenticate to ECR using the application EC2 instance role.
-if ! aws ecr get-login-password --region "$REGION" |
-     docker login --username AWS --password-stdin "$ECR_REGISTRY"; then
-    echo "ERROR: ECR authentication failed."
-    exit 1
-fi
+# ECR authentication on this EC2 instance is handled by
+# docker-credential-ecr-login using the instance's IAM role.
+# Do not run docker login: the helper's store operation is not implemented.
 
 # Check that the previous version can be retrieved before deployment.
 if ! docker pull "$ECR_REGISTRY/serviops-backend:$PREVIOUS_TAG"; then
