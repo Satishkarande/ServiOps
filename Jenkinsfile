@@ -5,7 +5,7 @@ pipeline {
         AWS_REGION = 'ap-south-1'
         ECR_REGISTRY = '373220260877.dkr.ecr.ap-south-1.amazonaws.com'
         APP_INSTANCE_ID = 'i-00ea3a0f181c9dade'
-        APP_HEALTH_URL = 'https://serviops.xyz/health'
+        APP_HEALTH_URL = 'https://serviops.xyz/health/ready'
     }
 
     stages {
