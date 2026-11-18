@@ -184,6 +184,49 @@ if [ "$NEW_TAG" = "$PREVIOUS_TAG" ]; then
     exit 1
 fi
 
+# Retrieve the current RDS password on the App EC2 instance.
+# The EC2 instance role must allow secretsmanager:GetSecretValue.
+SECRET_ARN='arn:aws:secretsmanager:ap-south-1:373220260877:secret:rds!db-a129be28-91b6-45cf-a03d-9ccbe94ecf28-7YyQJv'
+SECRET_FILE="$(mktemp)"
+chmod 600 "$SECRET_FILE"
+
+cleanup_secret() {
+    rm -f "$SECRET_FILE"
+    unset DATABASE_PASSWORD
+}
+trap cleanup_secret EXIT
+
+echo "Retrieving database credentials from AWS Secrets Manager."
+
+aws secretsmanager get-secret-value \
+    --secret-id "$SECRET_ARN" \
+    --region "$REGION" \
+    --query 'SecretString' \
+    --output text > "$SECRET_FILE"
+
+DATABASE_PASSWORD="$(python3 - "$SECRET_FILE" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as secret_file:
+    secret = json.load(secret_file)
+
+password = secret.get("password")
+if not isinstance(password, str) or not password:
+    raise SystemExit("Database password is missing from the secret.")
+
+print(password, end="")
+PY
+)"
+
+if [ -z "$DATABASE_PASSWORD" ]; then
+    echo "ERROR: Secrets Manager returned an empty database password."
+    exit 1
+fi
+
+export DATABASE_PASSWORD
+echo "Database credentials retrieved successfully."
+
 echo "Previous successful version: $PREVIOUS_TAG"
 echo "New version: $NEW_TAG"
 
@@ -476,4 +519,3 @@ exit 1
         }
     }
 }
-
